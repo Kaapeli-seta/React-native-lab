@@ -1,8 +1,10 @@
+import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {MediaItemWithOwner} from 'hybrid-types/DBTypes';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 type MediaItemProps = {
   item: MediaItemWithOwner;
+  navigation: NavigationProp<ParamListBase>;
 };
 
 const MediaListItem = ({item}: MediaItemProps) => {
