@@ -7,12 +7,13 @@ type MediaItemProps = {
   navigation: NavigationProp<ParamListBase>;
 };
 
-const MediaListItem = ({item}: MediaItemProps) => {
+const MediaListItem = ({item, navigation}: MediaItemProps) => {
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => {
         console.log(item.title + ' clicked');
+        navigation.navigate('Single', {item});
       }}
     >
       <Image

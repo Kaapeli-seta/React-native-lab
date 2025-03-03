@@ -1,11 +1,14 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import {Button, Card} from '@rneui/base';
+import {useUserContext} from '../hooks/contextHooks';
 
 const Profile = () => {
+  const {user, handleLogout} = useUserContext();
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <Card>
+      <Card.Title>{user?.username}</Card.Title>
+      {/* TODO: add user details */}
+      <Button onPress={handleLogout}>Logout</Button>
+    </Card>
   );
 };
 

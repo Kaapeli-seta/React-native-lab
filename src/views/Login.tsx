@@ -1,19 +1,20 @@
 import {useState} from 'react';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import {Button} from '@rneui/base';
 
 const Login = () => {
-  const [displayRegister, setDisplayRegister] = useState<boolean>(false);
+  const [displayRegister, setDisplayRegister] = useState(false);
+
   const toggleRegister = () => {
     setDisplayRegister(!displayRegister);
   };
+
   return (
     <>
-      {displayRegister ? (
-        <RegisterForm toggleRegister={toggleRegister} />
-      ) : (
-        <LoginForm toggleRegister={toggleRegister} />
-      )}
+    <Text></Text>
+      {displayRegister ? <RegisterForm /> : <LoginForm />}
+      <Button onPress={toggleRegister}> or {displayRegister ? 'login' : 'register'}? </Button>
     </>
   );
 };
