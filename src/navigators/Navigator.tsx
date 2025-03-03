@@ -4,7 +4,7 @@ import Home from '../views/Home';
 import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Single from '../views/Single';
-import {Icon, Text} from '@rneui/base';
+import {Icon} from '@rneui/base';
 import {useUserContext} from '../hooks/contextHooks';
 import Login from '../views/Login';
 import MyFiles from '../views/MyFiles';
@@ -56,7 +56,6 @@ const Navigator = () => {
   return (
     <NavigationContainer>
       <StackScreen />
-      <Text>jotain</Text>
     </NavigationContainer>
   );
 };
