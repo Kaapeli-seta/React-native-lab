@@ -4,10 +4,10 @@ import Home from '../views/Home';
 import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Single from '../views/Single';
-//import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Icon, Text} from '@rneui/base';
 import {useUserContext} from '../hooks/contextHooks';
 import Login from '../views/Login';
+import MyFiles from '../views/MyFiles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,19 +23,13 @@ const TabScreen = () => {
           } else if (route.name === 'My Profile') {
             iconName = 'person';
           }
-          // You can return any component that you like here!
-          //return <Ionicons name={iconName} size={size} color={color} />;
           return <Icon name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'blue',
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen
-        name="All Media"
-        component={Home}
-        // options={{headerShown: false}}
-      />
+      <Tab.Screen name="All Media" component={Home} />
       <Tab.Screen name="My Profile" component={Profile} />
     </Tab.Navigator>
   );
@@ -49,6 +43,7 @@ const StackScreen = () => {
         <>
           <Stack.Screen name="Tabs" component={TabScreen} options={{headerShown: false}} />
           <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="My Files" component={MyFiles} />
         </>
       ) : (
         <Stack.Screen name="My media app - login" component={Login} />

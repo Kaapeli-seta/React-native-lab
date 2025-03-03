@@ -16,13 +16,14 @@ import {
   UserResponse,
 } from 'hybrid-types/MessageTypes';
 
-const useMedia = () => {
+const useMedia = (user_id?: number | undefined) => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
+  const url = user_id ? '/media/byuser/' + user_id : '/media';
   useEffect(() => {
     const getMedia = async () => {
       try {
         // kaikki mediat ilman omistajan tietoja
-        const media = await fetchData<MediaItem[]>(process.env.EXPO_PUBLIC_MEDIA_API + '/media');
+        const media = await fetchData<MediaItem[]>(process.env.EXPO_PUBLIC_MEDIA_API + url);
         // haetaan omistajat id:n perusteella
         const mediaWithOwner: MediaItemWithOwner[] = await Promise.all(
           media.map(async (item) => {
@@ -65,7 +66,6 @@ const useMedia = () => {
       headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'},
       body: JSON.stringify(media),
     };
-    // TODO: return the data
     return await fetchData<MessageResponse>(process.env.EXPO_PUBLIC_MEDIA_API + '/media', options);
   };
   return {mediaArray, postMedia};
