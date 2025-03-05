@@ -8,9 +8,12 @@ import {Icon} from '@rneui/base';
 import {useUserContext} from '../hooks/contextHooks';
 import Login from '../views/Login';
 import MyFiles from '../views/MyFiles';
+import Upload from '../views/Upload';
+import {NavigatorType} from '../types/localtypes';
+import Modal from '../views/Modal';
 
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator<NavigatorType>();
+const Stack = createNativeStackNavigator<NavigatorType>();
 
 const TabScreen = () => {
   return (
@@ -22,6 +25,8 @@ const TabScreen = () => {
             iconName = focused ? 'home-filled' : 'home';
           } else if (route.name === 'My Profile') {
             iconName = 'person';
+          } else if (route.name === 'Upload') {
+            iconName = 'cloud-upload';
           }
           return <Icon name={iconName} size={size} color={color} />;
         },
@@ -31,6 +36,7 @@ const TabScreen = () => {
     >
       <Tab.Screen name="All Media" component={Home} />
       <Tab.Screen name="My Profile" component={Profile} />
+      <Tab.Screen name="Upload" component={Upload} />
     </Tab.Navigator>
   );
 };
@@ -44,6 +50,7 @@ const StackScreen = () => {
           <Stack.Screen name="Tabs" component={TabScreen} options={{headerShown: false}} />
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="My Files" component={MyFiles} />
+          <Stack.Screen name="Modal" component={Modal} />
         </>
       ) : (
         <Stack.Screen name="My media app - login" component={Login} />

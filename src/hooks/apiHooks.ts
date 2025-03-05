@@ -15,12 +15,17 @@ import {
   UploadResponse,
   UserResponse,
 } from 'hybrid-types/MessageTypes';
+import * as FileSystem from 'expo-file-system';
+import {useUpdateContext} from './contextHooks';
 
 const useMedia = (user_id?: number | undefined) => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
+  const [loading, setLoading] = useState(false);
+  const {update} = useUpdateContext();
   const url = user_id ? '/media/byuser/' + user_id : '/media';
   useEffect(() => {
     const getMedia = async () => {
+      setLoading(true);
       try {
         // kaikki mediat ilman omistajan tietoja
         const media = await fetchData<MediaItem[]>(process.env.EXPO_PUBLIC_MEDIA_API + url);
@@ -44,11 +49,13 @@ const useMedia = (user_id?: number | undefined) => {
         setMediaArray(mediaWithOwner);
       } catch (error) {
         console.error((error as Error).message);
+      } finally {
+        setLoading(false);
       }
     };
 
     getMedia();
-  }, []);
+  }, [update]);
 
   const postMedia = async (file: UploadResponse, inputs: Record<string, string>, token: string) => {
     const media: Omit<
@@ -68,7 +75,19 @@ const useMedia = (user_id?: number | undefined) => {
     };
     return await fetchData<MessageResponse>(process.env.EXPO_PUBLIC_MEDIA_API + '/media', options);
   };
-  return {mediaArray, postMedia};
+
+  const deleteMedia = async (media_id: number, token: string) => {
+    const options = {
+      method: 'DELETE',
+      headers: {Authorization: 'Bearer ' + token},
+    };
+    return await fetchData<MessageResponse>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/media/' + media_id,
+      options,
+    );
+  };
+
+  return {mediaArray, postMedia, loading, deleteMedia};
 };
 
 const useFile = () => {
@@ -82,7 +101,25 @@ const useFile = () => {
     };
     return await fetchData<UploadResponse>(process.env.EXPO_PUBLIC_UPLOAD_API + '/upload', options);
   };
-  return {postFile};
+  const postExpoFile = async (imageUri: string, token: string): Promise<UploadResponse> => {
+    const fileResult = await FileSystem.uploadAsync(
+      process.env.EXPO_PUBLIC_UPLOAD_API + '/upload',
+      imageUri,
+      {
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: 'file',
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      },
+    );
+    if (!fileResult.body) {
+      throw new Error('Upload failed: missing response body');
+    }
+    return JSON.parse(fileResult.body);
+  };
+  return {postFile, postExpoFile};
 };
 
 const useAuthentication = () => {
@@ -106,7 +143,6 @@ const useAuthentication = () => {
 };
 
 const useUser = () => {
-  // TODO: implement auth/user server API connections here
   const getUserByToken = async (token: string) => {
     const options = {
       headers: {Authorization: 'Bearer ' + token},
@@ -189,7 +225,6 @@ const useComment = () => {
 
 const useLike = () => {
   const postLike = async (media_id: number, token: string) => {
-    console.log('**********************************************' + token);
     const options = {
       method: 'POST',
       headers: {Authorization: 'Bearer ' + token, 'Content-Type': 'application/json'},
@@ -199,7 +234,6 @@ const useLike = () => {
   };
 
   const deleteLike = async (like_id: number, token: string) => {
-    console.log('**********************************************' + token);
     const options = {
       method: 'DELETE',
       headers: {Authorization: 'Bearer ' + token},

@@ -1,12 +1,25 @@
-import {User, UserWithNoPassword} from 'hybrid-types/DBTypes';
+import {MediaItemWithOwner, User, UserWithNoPassword} from 'hybrid-types/DBTypes';
 
-type Credentials = Pick<User, 'username' | 'password'>;
-type RegisterCredentials = Pick<User, 'username' | 'password' | 'email'>;
-type AuthContextType = {
+export type Credentials = Pick<User, 'username' | 'password'>;
+export type RegisterCredentials = Pick<User, 'username' | 'password' | 'email'>;
+
+export type AuthContextType = {
   user: UserWithNoPassword | null;
   handleLogin: (credentials: Credentials) => void;
   handleLogout: () => void;
   handleAutoLogin: () => void;
 };
 
-export type {Credentials, RegisterCredentials, AuthContextType};
+export type NavigatorType = {
+  // Tab navigator screens
+  'All Media': undefined;
+  'My Profile': undefined;
+  Upload: undefined;
+
+  // Stack navigator screens
+  Tabs: undefined;
+  Single: {item: MediaItemWithOwner};
+  'My Files': undefined;
+  'My media app - login': undefined;
+  Modal: {item: MediaItemWithOwner};
+};
